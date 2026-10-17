@@ -1,42 +1,24 @@
 !alias og embed -title "Outgunned Dice Roller" 
 -desc "<drac2>
-# ==========================================
-# 1. ARGUMENT PARSING & MODE VALIDATION
-# ==========================================
 args = &ARGS&
-
-# Combine all arguments into a single string for processing
-# Example: "4+2" -> "4+2" | "3 r 4 2" -> "3r42" (after strip/split)
 full_input = "".join(args).lower()
-
 mode = "normal"
 raw_dice_str = full_input
 saved_face = 0
 saved_count = 0
-
-# Detect Mode based on delimiter characters r, f, or a
 mode_char = ""
 if "r" in full_input: mode_char = "r"
 elif "f" in full_input: mode_char = "f"
 elif "a" in full_input: mode_char = "a"
-
 if mode_char:
     mode = "reroll" if mode_char == 'r' else "free" if mode_char == 'f' else "allin"
-    
-    # Split string: left side is the dice expression, right side is the saved dice data
     parts_mode = full_input.split(mode_char)
     raw_dice_str = parts_mode[0]
-    
-    # Get remaining digits on the right side (example: "42" or "4 2")
     right_side = parts_mode[1].strip()
-    # Clear whitespaces if any in the remaining right argument
     right_digits = [c for c in right_side if c.isdigit()]
-    
     if len(right_digits) >= 2:
         saved_face = int(right_digits[0])
         saved_count = int(right_digits[1])
-
-# Process math calculations (+ or -) on the dice count expression
 mod = 0
 try:
     expr = raw_dice_str.replace('-', '+-')
@@ -46,8 +28,6 @@ try:
         if p: mod += int(p)
 except:
     mod = 0
-
-# DICE LIMITS PER MODE
 if mode == "normal":
     if mod < 2:
         num_dice = 2
@@ -68,41 +48,27 @@ else:
     else:
         num_dice = mod
         dice_label = str(num_dice)
-
-# Specific validation for standard Re-roll
 error_msg = ""
 if mode == "reroll" and saved_count < 2:
     error_msg = "**[ERROR]** Standard Re-roll failed! You must have at least 1 *Basic Success* (2 matching dice) from the initial roll."
-
-# ==========================================
-# 2. DICE ROLLING (ROLL)
-# ==========================================
 rolls = []
 formatted_rolls = "[]"
 if not error_msg:
     rolls = [randint(1, 6) for _ in range(num_dice)]
     rolls.sort()
     formatted_rolls = "[" + ", ".join([f"**{x}**" if x == 1 else str(x) for x in rolls]) + "]"
-
-# ==========================================
-# 3. SCORE CALCULATION & RISK EVALUATION
-# ==========================================
 tot = 0
 calculation_status = ""
-
 if not error_msg:
     counts = [0, 0, 0, 0, 0, 0]
     for face in rolls:
         counts[face - 1] += 1
-    
     new_matches_to_saved = counts[saved_face - 1] if saved_face > 0 else 0
     new_max_count = max(counts)
     current_best = max(saved_count + new_matches_to_saved, new_max_count)
-    
     if mode == "normal":
         tot = current_best
         calculation_status = "Initial Roll."
-        
     elif mode == "free":
         if current_best > saved_count:
             tot = current_best
@@ -110,7 +76,6 @@ if not error_msg:
         else:
             tot = saved_count
             calculation_status = "Free Re-roll Failed to improve. Initial score secured (No Penalty)."
-            
     elif mode == "reroll":
         if current_best > saved_count:
             tot = current_best
@@ -118,7 +83,6 @@ if not error_msg:
         else:
             tot = max(1, saved_count - 1)
             calculation_status = "Re-roll Failed to improve! Penalty incurred: lost 1 success level."
-            
     elif mode == "allin":
         if current_best > saved_count:
             tot = current_best
@@ -126,10 +90,6 @@ if not error_msg:
         else:
             tot = 0
             calculation_status = "ALL IN FAILED TO IMPROVE! ALL PREVIOUS SUCCESSES COMPLETELY LOST!"
-
-# ==========================================
-# 4. LADDER DETERMINATION & EMBED COLOR
-# ==========================================
 if error_msg:
     ladder = "Invalid Action"
     embed_color = "#FF0000"
@@ -153,7 +113,6 @@ else:
     else:
         ladder = "Jackpot!!!"
         embed_color = "#FF00FF"
-
     mode_title = mode.upper() if mode != "normal" else "INITIAL ROLL"
     output_text = f'**Mode:** {mode_title}\n**Dice:** {dice_label}\n**Rolls:** {formatted_rolls}\n**Result:** {tot} ({ladder})\n*Note: {calculation_status}*'
 </drac2>
