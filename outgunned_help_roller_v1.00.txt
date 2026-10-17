@@ -1,0 +1,37 @@
+!alias oghelp embed -title "🎲 Outgunned Dice Roller Guide (v1.0 beta)" 
+-desc "This bot calculates scores based on the **highest frequency of matching dice** (pairs/sets) for the **Outgunned RPG** system.
+
+### 🚀 Commands & Formatting
+
+**1. Initial Roll**
+Rolls your starting pool (Min: 2, Max: 9 dice). Supports arithmetic (`+` / `-`).
+* **Format:** `!og [number of dice]`
+* **Examples:** `!og 5` or `!og 4+2`
+
+**2. Standard Re-roll (\`r\`)**
+Re-rolls non-matching dice. Requires at least a *Basic Success* (pair) to use.
+* **Risk:** If it fails to improve, your initial success level is penalized by -1.
+* **Format:** `!og [remaining dice] r [saved face] [initial matching count]`
+* **Example:** `!og 3 r 4 2` *(keeps a pair of 4s)*
+
+**3. Free Re-roll (\`f\`)**
+Special re-roll from Feats or gear. Can be used on complete failures with **no penalty risk**.
+* **Format:** `!og [remaining dice] f [saved face] [initial matching count]`
+* **Example:** `!og 5 f 0 0` *(free re-roll on 0 successes)*
+
+**4. All In (\`a\`)**
+High-stakes gamble after a successful re-roll.
+* **Extreme Risk:** If it fails to improve, **all successes are completely lost (wiped to 0)**.
+* **Format:** `!og [remaining dice] a [saved face] [initial matching count]`
+* **Example:** `!og 1 a 5 4`
+
+---
+### 🏆 The Success Ladder
+* 0 - 1 Match: **Failure** 🔴
+* 2 Matches: **Basic Success** 🟠
+* 3 Matches: **Critical Success** 🟡
+* 4 Matches: **Extreme Success** 🟢
+* 5 Matches: **Impossible Success** 🔵
+* 6+ Matches: **Jackpot!!!** 🟣
+
+*Note: All rolled **1**s are automatically bolded, and the sidebar color dynamically updates to match your success level!*" -color "#00FFFF" -footer "Type !oghelp anytime to see this guide."
