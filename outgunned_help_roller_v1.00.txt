@@ -1,4 +1,4 @@
-!alias oghelp embed -title "🎲 Outgunned Dice Roller Guide (v1.0 beta)" 
+!alias oghelp embed -title "🎲 Outgunned Dice Roller Guide (v1.0 beta) by skyren31" 
 -desc "This bot calculates scores based on the **highest frequency of matching dice** (pairs/sets) for the **Outgunned RPG** system.
 
 ### 🚀 Commands & Formatting
