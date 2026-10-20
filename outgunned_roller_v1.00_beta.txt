@@ -117,4 +117,4 @@ else:
     output_text = f'**Mode:** {mode_title}\n**Dice:** {dice_label}\n**Rolls:** {formatted_rolls}\n**Result:** {tot} ({ladder})\n*Note: {calculation_status}*'
 </drac2>
 {{output_text}}" -color "{{embed_color}}"
--footer "Outgunned Roller v1.0 beta."
+-footer "Outgunned Roller v1.0 beta by Skyren31."
